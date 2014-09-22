@@ -18,8 +18,8 @@ public class CaptureTest {
 		CaptureTask t1 = new CaptureTask("BoleBlogParser","http://blog.jobbole.com/74107/", "GET");
 		tasks.add(t1);
 
-		/*CaptureTask t5 = new CaptureTask("CSDNBlogParser","http://blog.csdn.net/w337198302/article/details/39430647", "GET");
-		tasks.add(t5);*/
+		CaptureTask t5 = new CaptureTask("CSDNBlogParser","http://blog.csdn.net/w337198302/article/details/39430647", "GET");
+		tasks.add(t5);
 		
 		/*
 		CaptureTask t2 = new CaptureTask("BoleBlogParser","http://blog.jobbole.com/76983/", "GET");
