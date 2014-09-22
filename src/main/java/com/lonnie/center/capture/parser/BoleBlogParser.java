@@ -29,12 +29,26 @@ public class BoleBlogParser extends BasicParser {
 		Elements title = document.getElementsByAttributeValue("class", "entry-header");
 		if (null != title) {
 			//Parse header info
-			String titleText = title.get(0).text();
+			String titleText = title.get(0).text().trim();
+			
 			//Parse category info
 			List<String> categories = new ArrayList<String>();
 			Elements category = document.getElementsByAttributeValue("rel", "category tag");
 			for (Element element : category) {
-				categories.add(element.text());
+				if (element.attr("href").contains("/category/")) {
+					categories.add(element.text().trim());
+				}
+			}
+			
+			//Parse tag info
+			List<String> tags = new ArrayList<String>();
+			Elements tagsEl = document.getElementsByAttributeValue("class", "entry-meta-hide-on-mobile");
+			for (Element element : tagsEl) {
+				for (Element childEl : element.children()) {
+					if (childEl.attr("href").contains("/tag/")) {
+						tags.add(childEl.text().trim());
+					}
+				}
 			}
 			
 			//Parse blog content
@@ -45,6 +59,7 @@ public class BoleBlogParser extends BasicParser {
 			WebResult result = new WebResult();
 			result.setTitle(titleText);
 			result.setCategories(categories);
+			result.setTags(tags);
 			result.setContent(contentEl.html());
 			result.setUrl(task.getUrl());
 			result.setParser(task.getParser());

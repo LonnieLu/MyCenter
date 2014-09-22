@@ -53,7 +53,7 @@ public class CaptureTaskExcutor extends Thread {
 	private BasicParser getParserByTask(CaptureTask task) {
 		if (StringUtils.equals(task.getParser(), "BoleBlogParser")) {
 			return new BoleBlogParser();
-		} else if (StringUtils.equals(task.getParser(), "CSDNParser")) {
+		} else if (StringUtils.equals(task.getParser(), "CSDNBlogParser")) {
 			return new CSDNBlogParser();
 		}
 		return null;

@@ -9,6 +9,15 @@ public class WebResult {
 	private String content;
 	private String parser;
 	private List<String> categories;
+	private List<String> tags;
+
+	public List<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
 
 	public String getParser() {
 		return parser;

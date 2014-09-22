@@ -62,6 +62,8 @@ public abstract class BasicParser {
 			http.setReadTimeout(CaptureConfig.getTimeout());
 			http.setRequestMethod(StringUtils.isEmpty(task.getHttpMethod()) ? "GET" : task.getHttpMethod());
 			http.setDoOutput(true);
+			http.setRequestProperty("User-agent","Mozilla/5.0");
+			
 			l_reader = new BufferedReader(new InputStreamReader(http.getInputStream(), "UTF-8"));
 			
 			String sCurrentLine = null;
