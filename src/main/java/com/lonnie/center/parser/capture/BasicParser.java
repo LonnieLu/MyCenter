@@ -1,23 +1,15 @@
-package com.lonnie.center.capture.parser;
+package com.lonnie.center.parser.capture;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import com.lonnie.center.capture.WebResult;
-import com.lonnie.center.exception.HttpConnectionException;
 import com.lonnie.center.exception.UnableToParseResultException;
 import com.lonnie.center.task.CaptureTask;
-import com.lonnie.center.util.CaptureConfig;
+import com.lonnie.center.util.HttpConnectionUtil;
 
 public abstract class BasicParser {
 	
@@ -34,62 +26,12 @@ public abstract class BasicParser {
 		String content;
 		List<WebResult> results = new ArrayList<WebResult>();
 		try {
-			content = getContentByTask(task);
+			content = HttpConnectionUtil.getContentByTask(task);
 			results = parseResult(content, task);
 		} catch (Exception e) {
 			throw e;
 		}
 		return results;
-	}
-
-	/**
-	 * Get html content through url
-	 * @param task
-	 * @return html content
-	 * @throws HttpConnectionException 
-	 */
-	public String getContentByTask(CaptureTask task) throws HttpConnectionException {
-		BufferedReader l_reader = null;
-		StringBuffer resultBuffer = new StringBuffer();
-		HttpURLConnection http = null;
-		try {
-			URL url = new URL(task.getUrl());
-			
-			http = (HttpURLConnection) url.openConnection();
-			buildHttpConnectionParam(task, http);
-			
-			l_reader = new BufferedReader(new InputStreamReader(http.getInputStream(), "UTF-8"));
-			
-			String sCurrentLine = null;
-			while ((sCurrentLine = l_reader.readLine()) != null) {
-				resultBuffer.append(sCurrentLine);
-				resultBuffer.append("\r\n");
-			}
-			return resultBuffer.toString();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			throw new HttpConnectionException("Failed to get result by url :" + ex.getMessage());
-		} finally {
-			if (null != l_reader){
-				try {
-					l_reader.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			if (http != null) {
-				http.disconnect();
-			}
-		}
-	}
-
-	private void buildHttpConnectionParam(CaptureTask task,
-			HttpURLConnection http) throws ProtocolException {
-		http.setConnectTimeout(CaptureConfig.getTimeout());
-		http.setReadTimeout(CaptureConfig.getTimeout());
-		http.setRequestMethod(StringUtils.isEmpty(task.getHttpMethod()) ? "GET" : task.getHttpMethod());
-		http.setDoOutput(true);
-		http.setRequestProperty("User-agent","Mozilla/5.0");
 	}
 
 	/**

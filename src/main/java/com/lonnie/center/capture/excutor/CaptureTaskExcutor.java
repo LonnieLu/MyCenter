@@ -5,17 +5,21 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 import com.lonnie.center.capture.WebResult;
-import com.lonnie.center.capture.parser.BasicParser;
-import com.lonnie.center.capture.parser.BoleBlogParser;
-import com.lonnie.center.capture.parser.CSDNBlogParser;
-import com.lonnie.center.capture.task.pool.CaptureTaskPool;
+import com.lonnie.center.capture.taskpool.CaptureTaskPool;
 import com.lonnie.center.exception.HttpConnectionException;
 import com.lonnie.center.exception.UnableToParseResultException;
+import com.lonnie.center.parser.capture.BasicParser;
+import com.lonnie.center.parser.capture.BoleBlogParser;
+import com.lonnie.center.parser.capture.CSDNBlogParser;
 import com.lonnie.center.task.CaptureTask;
 import com.lonnie.center.task.service.TaskService;
 import com.lonnie.center.util.CaptureConfig;
 import com.lonnie.center.util.LogUtil;
 
+/**
+ * Run after start up
+ * @author LULO2
+ */
 public class CaptureTaskExcutor extends Thread {
 	
 	private TaskService taskService;
@@ -23,7 +27,7 @@ public class CaptureTaskExcutor extends Thread {
 	@Override
 	public void run() {
 		while (true) {
-			CaptureTask task = CaptureTaskPool.getCaptureTask();
+			CaptureTask task = null;
 			try {
 				task = CaptureTaskPool.getCaptureTask();
 				if (null != task) {
@@ -62,6 +66,11 @@ public class CaptureTaskExcutor extends Thread {
 		// TODO Store result to lucene for search
 	}
 
+	/**
+	 * Get result parser by task
+	 * @param task
+	 * @return parser for parse hrml
+	 */
 	private BasicParser getParserByTask(CaptureTask task) {
 		if (StringUtils.equals(task.getParser(), "BoleBlogParser")) {
 			return new BoleBlogParser();
@@ -79,7 +88,8 @@ public class CaptureTaskExcutor extends Thread {
 	 */
 	private void updateTaskStatus(CaptureTask task, String exceptionDesc,
 			String status) {
-		getTaskService().updateTaskStatus(task, status, exceptionDesc);
+		//TODO Ignore first, due to not impl yet
+		//getTaskService().updateTaskStatus(task, status, exceptionDesc);
 	}
 	
 	/**
@@ -97,3 +107,4 @@ public class CaptureTaskExcutor extends Thread {
 	}
 
 }
+

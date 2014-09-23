@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.lonnie.center.task.CaptureTask;
+import com.lonnie.center.task.TaskGenerateTrigger;
 import com.lonnie.center.task.repository.TaskRepository;
 
 public class TaskServiceImpl implements TaskService {
@@ -39,6 +40,14 @@ public class TaskServiceImpl implements TaskService {
 	 */
 	public void setTaskRepository(TaskRepository taskRepository) {
 		this.taskRepository = taskRepository;
+	}
+
+	public List<CaptureTask> loadTaskToTaskPool(int poolSize) {
+		return getTaskRepository().loadTaskToTaskPool(poolSize);
+	}
+
+	public List<TaskGenerateTrigger> loadTaskTriggers() {
+		return getTaskRepository().loadTaskTriggers();
 	}
 
 }

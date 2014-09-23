@@ -1,4 +1,4 @@
-package com.lonnie.center.capture.parser;
+package com.lonnie.center.parser.capture;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class BoleBlogParser extends BasicParser {
+public class CSDNBlogParser extends BasicParser {
 
 	/*
 	 * (non-Javadoc)
@@ -15,8 +15,8 @@ public class BoleBlogParser extends BasicParser {
 	 */
 	@Override
 	public boolean isResultParseable(Document document) {
-		Elements title = document.getElementsByAttributeValue("class", "entry-header");
-		return title != null;
+		Elements title = document.getElementsByAttributeValue("class", "link_title");
+		return null != title;
 	}
 
 	/*
@@ -25,7 +25,7 @@ public class BoleBlogParser extends BasicParser {
 	 */
 	@Override
 	public String parseTitle(Document document) {
-		Elements title = document.getElementsByAttributeValue("class", "entry-header");
+		Elements title = document.getElementsByAttributeValue("class", "link_title");
 		return title.get(0).text().trim();
 	}
 
@@ -35,7 +35,7 @@ public class BoleBlogParser extends BasicParser {
 	 */
 	@Override
 	public String parseContents(Document document) {
-		Elements contentEl = document.getElementsByAttributeValue("class", "entry");
+		Element contentEl = document.getElementById("article_content");
 		return contentEl.html();
 	}
 
@@ -46,10 +46,10 @@ public class BoleBlogParser extends BasicParser {
 	@Override
 	public List<String> parseCategories(Document document) {
 		List<String> categories = new ArrayList<String>();
-		Elements category = document.getElementsByAttributeValue("rel", "category tag");
+		Elements category = document.getElementsByAttributeValue("class", "link_categories");
 		for (Element element : category) {
-			if (element.attr("href").contains("/category/")) {
-				categories.add(element.text().trim());
+			for (Element childEl : element.children()) {
+					categories.add(childEl.text().replace("分类", "").trim());
 			}
 		}
 		return categories;
@@ -62,12 +62,10 @@ public class BoleBlogParser extends BasicParser {
 	@Override
 	public List<String> parseTags(Document document) {
 		List<String> tags = new ArrayList<String>();
-		Elements tagsEl = document.getElementsByAttributeValue("class", "entry-meta-hide-on-mobile");
+		Elements tagsEl = document.getElementsByAttributeValue("class", "tag2box");
 		for (Element element : tagsEl) {
 			for (Element childEl : element.children()) {
-				if (childEl.attr("href").contains("/tag/")) {
-					tags.add(childEl.text().trim());
-				}
+				tags.add(childEl.text().trim());
 			}
 		}
 		return tags;

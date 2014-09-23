@@ -1,4 +1,4 @@
-package com.lonnie.center.capture.task.pool;
+package com.lonnie.center.capture.taskpool;
 
 import java.util.ArrayList;
 import java.util.List;
