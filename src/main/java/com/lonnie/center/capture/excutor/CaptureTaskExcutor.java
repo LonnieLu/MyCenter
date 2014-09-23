@@ -8,18 +8,24 @@ import com.lonnie.center.capture.WebResult;
 import com.lonnie.center.capture.parser.BasicParser;
 import com.lonnie.center.capture.parser.BoleBlogParser;
 import com.lonnie.center.capture.parser.CSDNBlogParser;
-import com.lonnie.center.capture.task.CaptureTask;
 import com.lonnie.center.capture.task.pool.CaptureTaskPool;
+import com.lonnie.center.exception.HttpConnectionException;
+import com.lonnie.center.exception.UnableToParseResultException;
+import com.lonnie.center.task.CaptureTask;
+import com.lonnie.center.task.service.TaskService;
 import com.lonnie.center.util.CaptureConfig;
 import com.lonnie.center.util.LogUtil;
 
 public class CaptureTaskExcutor extends Thread {
 	
+	private TaskService taskService;
+	
 	@Override
 	public void run() {
 		while (true) {
+			CaptureTask task = CaptureTaskPool.getCaptureTask();
 			try {
-				CaptureTask task = CaptureTaskPool.getCaptureTask();
+				task = CaptureTaskPool.getCaptureTask();
 				if (null != task) {
 					LogUtil.info("CaptureTaskExcutor", "Task [" + task.getUrl() + "] start..");
 					BasicParser parser = getParserByTask(task);
@@ -28,12 +34,18 @@ public class CaptureTaskExcutor extends Thread {
 					} else {
 						List<WebResult> results = parser.execute(task);
 						LogUtil.info("CaptureTaskExcutor", "Task [" + task.getUrl() + "] capture, got [" + results.size() + "]result..");
+						updateTaskStatus(task, "", "Success");
+						LogUtil.info("CaptureTaskExcutor", "Update task [" + task.getUrl() + "] status completed..");
 						storeCaptureResult(results);
 						LogUtil.info("CaptureTaskExcutor", "Task [" + task.getUrl() + "] store completed..");
 					}
 				}
+			} catch (HttpConnectionException e) {
+				updateTaskStatus(task, e.getExceptionDesc(), "Failed");
+			} catch (UnableToParseResultException e) {
+				updateTaskStatus(task, e.getExceptionDesc(), "Failed");
 			} catch (Exception e) {
-				LogUtil.error("CaptureTaskExcutor", "Got exception when excute task: " + e.getMessage());
+				updateTaskStatus(task, e.getMessage(), "Failed");
 			} finally {
 				try {
 					LogUtil.info("CaptureTaskExcutor", "Sleep:" + CaptureConfig.getCaptureInterval());
@@ -57,6 +69,31 @@ public class CaptureTaskExcutor extends Thread {
 			return new CSDNBlogParser();
 		}
 		return null;
+	}
+	
+	/**
+	 * Update task status
+	 * @param task the task to update
+	 * @param exceptionDesc the exception description, only got value when failed
+	 * @param status Failed/Success
+	 */
+	private void updateTaskStatus(CaptureTask task, String exceptionDesc,
+			String status) {
+		getTaskService().updateTaskStatus(task, status, exceptionDesc);
+	}
+	
+	/**
+	 * @return the taskService
+	 */
+	public TaskService getTaskService() {
+		return taskService;
+	}
+
+	/**
+	 * @param taskService the taskService to set
+	 */
+	public void setTaskService(TaskService taskService) {
+		this.taskService = taskService;
 	}
 
 }

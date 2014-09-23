@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 
-import com.lonnie.center.capture.task.CaptureTask;
+import com.lonnie.center.task.CaptureTask;
 import com.lonnie.center.util.LogUtil;
 
 public class CaptureTaskPool {

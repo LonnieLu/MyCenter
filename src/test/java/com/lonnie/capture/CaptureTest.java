@@ -7,8 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.lonnie.center.capture.excutor.CaptureTaskExcutor;
-import com.lonnie.center.capture.task.CaptureTask;
 import com.lonnie.center.capture.task.pool.CaptureTaskPool;
+import com.lonnie.center.task.CaptureTask;
 
 public class CaptureTest {
 	
