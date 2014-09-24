@@ -16,7 +16,7 @@ public class TaskGenerationTest {
 	@Before
 	public void init() {
 		List<TaskGenerateTrigger> tasks = new ArrayList<TaskGenerateTrigger>();
-		TaskGenerateTrigger t1 = new TaskGenerateTrigger("BoleTaskGenerateParser","http://blog.jobbole.com/all-posts/", "GET");
+		TaskGenerateTrigger t1 = new TaskGenerateTrigger("BoleTaskGenerateParser","http://blog.jobbole.com/all-posts/page/323/", "GET");
 		tasks.add(t1);
 		trigger.setTriggers(tasks);
 	}

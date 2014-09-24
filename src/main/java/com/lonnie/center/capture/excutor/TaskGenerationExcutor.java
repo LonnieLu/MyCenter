@@ -34,6 +34,7 @@ public class TaskGenerationExcutor {
 			storeNewTask(tasks);
 			LogUtil.info(this.getClass().getName(), "Save new tasks end..");
 		} catch (Exception e) {
+			e.printStackTrace();
 			LogUtil.error(this.getClass().getName(), "Got exception when generate new task:" + e.getMessage());
 		}
 	}
