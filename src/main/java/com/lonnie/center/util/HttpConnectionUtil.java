@@ -15,6 +15,9 @@ import com.lonnie.center.task.TaskBasic;
 
 public class HttpConnectionUtil {
 	
+	public static final String HTTP_GET = "GET";
+	public static final String HTTP_POST = "POST";
+	
 	/**
 	 * Get html content through task
 	 * @param task capture task

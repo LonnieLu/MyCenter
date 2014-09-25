@@ -24,4 +24,8 @@ public abstract class BasicTaskGenerateParser {
 
 	public abstract List<CaptureTask> parseResult(String content, TaskGenerateTrigger taskGenerateTrigger);
 	
+	public abstract String getParser();
+	
+	public abstract String getHttpMethod();
+	
 }

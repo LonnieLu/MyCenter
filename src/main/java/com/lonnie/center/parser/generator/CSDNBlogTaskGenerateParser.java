@@ -14,4 +14,16 @@ public class CSDNBlogTaskGenerateParser extends BasicTaskGenerateParser {
 		return null;
 	}
 
+	@Override
+	public String getParser() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getHttpMethod() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
