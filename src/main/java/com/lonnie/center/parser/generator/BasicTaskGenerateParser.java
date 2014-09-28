@@ -3,6 +3,7 @@ package com.lonnie.center.parser.generator;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lonnie.center.exception.UnableToParseResultException;
 import com.lonnie.center.task.CaptureTask;
 import com.lonnie.center.task.TaskGenerateTrigger;
 import com.lonnie.center.util.HttpConnectionUtil;
@@ -34,7 +35,7 @@ public abstract class BasicTaskGenerateParser {
 	 * @param taskGenerateTrigger
 	 * @return List<CaptureTask> capture task list to return
 	 */
-	public abstract List<CaptureTask> parseResult(String content, TaskGenerateTrigger taskGenerateTrigger);
+	public abstract List<CaptureTask> parseResult(String content, TaskGenerateTrigger taskGenerateTrigger) throws UnableToParseResultException;
 	
 	/**
 	 * Update capture task trigger
@@ -54,6 +55,8 @@ public abstract class BasicTaskGenerateParser {
 	 * Http request method use to get content for capture task
 	 * @return http request method string GET/POST
 	 */
-	public abstract String getHttpMethod();
+	public String getHttpMethod(){
+		return HttpConnectionUtil.HTTP_GET;
+	}
 	
 }

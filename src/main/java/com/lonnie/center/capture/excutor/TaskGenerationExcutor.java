@@ -9,6 +9,8 @@ import org.apache.commons.lang.StringUtils;
 import com.lonnie.center.parser.generator.BasicTaskGenerateParser;
 import com.lonnie.center.parser.generator.BoleTaskGenerateParser;
 import com.lonnie.center.parser.generator.CSDNBlogTaskGenerateParser;
+import com.lonnie.center.parser.generator.IFeveTaskGenerateParser;
+import com.lonnie.center.parser.generator.ImportNewTaskGenerateParser;
 import com.lonnie.center.task.CaptureTask;
 import com.lonnie.center.task.TaskGenerateTrigger;
 import com.lonnie.center.task.service.TaskService;
@@ -77,6 +79,10 @@ public class TaskGenerationExcutor {
 			return new BoleTaskGenerateParser();
 		} else if (StringUtils.equals(taskGenerateTrigger.getParser(), "CSDNBlogTaskGenerateParser")) {
 			return new CSDNBlogTaskGenerateParser();
+		} else if (StringUtils.equals(taskGenerateTrigger.getParser(), "ImportNewTaskGenerateParser")) {
+			return new ImportNewTaskGenerateParser();
+		} else if (StringUtils.equals(taskGenerateTrigger.getParser(), "IFeveTaskGenerateParser")) {
+			return new IFeveTaskGenerateParser();
 		}
 		return null;
 	}
